@@ -138,7 +138,7 @@ namespace Hash{
         element** current = search(key);
         if(current == nullptr || (*current) == nullptr){
             //If it returns nullptr, then an element with the given key does not exist in the hash table
-            throw(std::invalid_argument("Key does not exist in table"));
+            throw(std::runtime_error("Key does not exist in table"));
         }
         else{
             return (*current)->data;
