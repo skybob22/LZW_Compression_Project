@@ -91,7 +91,7 @@ namespace Dictionary{
     template <typename T>
     T EncodeDictionary<T>::getCode(const std::vector<unsigned char>& vector) const{
         if(!hashTable->inTable(vector)){
-            throw std::invalid_argument("Key does not exist in dictionary(E)");
+            throw std::runtime_error("Key does not exist in dictionary(E)");
         }
         else{
             return(hashTable->getData(vector));

@@ -73,7 +73,7 @@ namespace Dictionary {
     template <typename T>
     void DecodeDictionary<T>::add(T prevCode,const unsigned char toAppend){
         if(!hashTable->inTable(prevCode)){
-            throw std::invalid_argument("Previous code does not exist in dictionary(D)");
+            throw std::runtime_error("Previous code does not exist in dictionary(D)");
         }
         else {
             std::vector<unsigned char> list = hashTable->getData(prevCode);
@@ -95,7 +95,7 @@ namespace Dictionary {
     template <typename T>
     std::vector<unsigned char> DecodeDictionary<T>::getBytes(T key){
         if(!hashTable->inTable(key)){
-            throw std::invalid_argument("Key is not in dictionary(D)");
+            throw std::runtime_error("Key is not in dictionary(D)");
         }
         else{
             return(hashTable->getData(key));
