@@ -1,6 +1,6 @@
 set(HEADER_FILES
         Header/HashTable.h
-        )
+        Header/EncodeDictionary.h)
 set(SOURCE_FILES
         ../main.cpp
         )

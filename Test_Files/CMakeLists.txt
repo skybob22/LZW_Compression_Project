@@ -3,7 +3,8 @@ project(LZW_Tests)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 add_executable(runTests
-        HashTableTests.cpp)
+        HashTableTests.cpp
+        EncodeDictionaryTests.cpp)
 
 add_subdirectory(gTest)
 
