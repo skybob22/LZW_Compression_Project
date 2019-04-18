@@ -80,4 +80,13 @@ namespace DictionaryTests{
         //Unsigned char can't even hold the basic elements, it doesn't have room for more
         EXPECT_ANY_THROW(dict_1.add(std::vector<unsigned char>{1,0}));
     }
+
+    TEST(Encode_Dictionary,differentTypesTest){
+        //The code should be able to compile and execute with any unsigned type
+        EncodeDictionary<unsigned char> dict_1;
+        EncodeDictionary<unsigned short> dict_2;
+        EncodeDictionary<unsigned int> dict_3;
+        EncodeDictionary<unsigned long> dict_4;
+        EXPECT_TRUE(true); //Just serves to tell that code execution reached this far
+    }
 }

@@ -61,4 +61,13 @@ namespace DictionaryTests{
         EXPECT_ANY_THROW(dict_2.add(vec));
     }
 
+    TEST(Decode_Dictionary,differentTypesTest){
+        //The code should be able to compile and execute with any unsigned type
+        DecodeDictionary<unsigned char> dict_1;
+        DecodeDictionary<unsigned short> dict_2;
+        DecodeDictionary<unsigned int> dict_3;
+        DecodeDictionary<unsigned long> dict_4;
+        EXPECT_TRUE(true); //Just serves to tell that code execution reached this far
+    }
+
 }
