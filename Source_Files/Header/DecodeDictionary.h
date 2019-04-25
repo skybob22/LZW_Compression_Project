@@ -69,7 +69,7 @@ namespace Dictionary {
     template <typename T>
     void DecodeDictionary<T>::add(const std::vector<unsigned char>& vector){
         if(currentAssignValue >= endOfFile-1){
-            throw std::overflow_error("Dictionary is full");
+            throw std::overflow_error("Dictionary is full(D)");
         }
         else{
             hashTable->insert(currentAssignValue,vector);
