@@ -66,7 +66,7 @@ namespace Dictionary{
     template <typename T>
     T EncodeDictionary<T>::add(const std::vector<unsigned char>& key){
         if(dictionaryFull()){
-            throw std::overflow_error("Dictionary is full");
+            throw std::overflow_error("Dictionary is full(E)");
         }
 
         if(hashTable->inTable(key)){
