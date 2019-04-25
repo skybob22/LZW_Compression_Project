@@ -147,7 +147,7 @@ namespace Hash{
 
     template<typename T, typename U>
     double HashTable<T,U>::getLoadFactor() const{
-        return (static_cast<double>(numberOfEntries)/arrayLen);
+        return (arrayLen>0?static_cast<double>(numberOfEntries)/arrayLen:0);
     }
 
     template <typename T, typename U>
