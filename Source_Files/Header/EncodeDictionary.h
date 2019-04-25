@@ -11,6 +11,8 @@ namespace Dictionary{
         //Will generate compile-time error if type is not unsigned
         static_assert(std::is_unsigned<T>::value,"Must use unsigned type");
 
+        EncodeDictionary(unsigned long initialSize,bool autoRehash);
+
         Hash::HashTable<std::vector<unsigned char>,T>* hashTable;
         T currentAssignValue;
 
@@ -39,12 +41,17 @@ namespace Dictionary{
 //====================Implementation====================//
 namespace Dictionary{
     template <typename T>
-    EncodeDictionary<T>::EncodeDictionary():EncodeDictionary(DEFAULT_TABLE_SIZE){
+    EncodeDictionary<T>::EncodeDictionary():EncodeDictionary(DEFAULT_TABLE_SIZE,true){
     }
 
     template <typename T>
-    EncodeDictionary<T>::EncodeDictionary(unsigned long initialSize):currentAssignValue(0){
+    EncodeDictionary<T>::EncodeDictionary(unsigned long initialSize):EncodeDictionary(initialSize,true){
+    }
+
+    template<typename T>
+    EncodeDictionary<T>::EncodeDictionary(unsigned long initialSize,bool autoRehash):currentAssignValue(0){
         hashTable = new Hash::HashTable<std::vector<unsigned char>,T>(hashFunction,initialSize);
+        hashTable->setAutoRehash(autoRehash);
         for(int i=0;i<256&&!dictionaryFull();i++){
             hashTable->insert(std::vector<unsigned char>({static_cast<unsigned char>(i)}),currentAssignValue);
             currentAssignValue++;
