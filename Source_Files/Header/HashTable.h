@@ -168,6 +168,7 @@ namespace Hash{
 
         arrayLen = (arrayLen*2)+1;
         tableArray = new element*[arrayLen]{nullptr};
+        lastSearch = nullptr;
         numberOfEntries = 0;
 
         for(int i=0;i<oldSize;i++){
