@@ -21,7 +21,7 @@ namespace Hash{
         element** lastSearch; //Used to accelerate getData when used immediately after a search
 
         static constexpr double MAX_LOAD_FACTOR = 0.75;
-        static constexpr long DEFAULT_TABLE_SIZE = 100;
+        static constexpr unsigned long DEFAULT_TABLE_SIZE = 100;
 
         unsigned long (*const hashFunction)(const T&);
         element** search(const T&);
