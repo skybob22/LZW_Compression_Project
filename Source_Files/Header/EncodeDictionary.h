@@ -28,10 +28,10 @@ namespace Dictionary{
 
         T add(const std::vector<unsigned char>& key);
 
-        bool inDictionary(unsigned char byte) const;
+        bool inDictionary(const unsigned char& byte) const;
         bool inDictionary(const std::vector<unsigned char>& vector) const;
 
-        T getCode(unsigned char inputByte) const;
+        T getCode(const unsigned char& inputByte) const;
         T getCode(const std::vector<unsigned char>& vector) const;
 
         bool dictionaryFull(void) const;
@@ -81,7 +81,7 @@ namespace Dictionary{
     }
 
     template <typename T>
-    bool EncodeDictionary<T>::inDictionary(unsigned char byte) const{
+    bool EncodeDictionary<T>::inDictionary(const unsigned char& byte) const{
         return(hashTable->inTable(std::vector<unsigned char>({byte})));
     }
 
@@ -91,7 +91,7 @@ namespace Dictionary{
     }
 
     template <typename T>
-    T EncodeDictionary<T>::getCode(unsigned char inputByte) const{
+    T EncodeDictionary<T>::getCode(const unsigned char& inputByte) const{
             return(this->getCode({std::vector<unsigned char>({inputByte})}));
     }
 
