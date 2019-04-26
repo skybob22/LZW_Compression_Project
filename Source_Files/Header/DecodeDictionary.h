@@ -33,8 +33,8 @@ namespace Dictionary{
         void add(T prevCode,const unsigned char toAppend);
         T getLastAssignedKey() const;
 
-        bool inDictionary(T key);
-        std::vector<unsigned char> getBytes(T key);
+        bool inDictionary(const T& key);
+        std::vector<unsigned char> getBytes(const T& key);
 
         bool dictionaryFull(void) const;
     };
@@ -95,12 +95,12 @@ namespace Dictionary {
     }
 
     template <typename T>
-    bool DecodeDictionary<T>::inDictionary(T key){
+    bool DecodeDictionary<T>::inDictionary(const T& key){
         return(hashTable->inTable(key));
     }
 
     template <typename T>
-    std::vector<unsigned char> DecodeDictionary<T>::getBytes(T key){
+    std::vector<unsigned char> DecodeDictionary<T>::getBytes(const T& key){
         if(!hashTable->inTable(key)){
             throw std::runtime_error("Key is not in dictionary(D)");
         }
