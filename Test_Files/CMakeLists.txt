@@ -5,7 +5,8 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 add_executable(runTests
         HashTableTests.cpp
         EncodeDictionaryTests.cpp
-        DecodeDictionaryTests.cpp)
+        DecodeDictionaryTests.cpp
+        combinedDictonaryTests.cpp)
 
 add_subdirectory(gTest)
 
