@@ -6,7 +6,8 @@ add_executable(runTests
         HashTableTests.cpp
         EncodeDictionaryTests.cpp
         DecodeDictionaryTests.cpp
-        combinedDictonaryTests.cpp)
+        combinedDictonaryTests.cpp
+        LZWCodecTests.cpp)
 
 add_subdirectory(gTest)
 
