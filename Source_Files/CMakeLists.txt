@@ -5,7 +5,8 @@ set(HEADER_FILES
         Header/LZWCodec.h)
 set(SOURCE_FILES
         ../main.cpp
-        Source/LZWCodec.cpp)
+        Source/LZWCodec.cpp
+        Source/UtilityFunctions.cpp)
 
 include_directories(Header)
 include_directories(Source)
