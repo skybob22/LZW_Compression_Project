@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "EncodeDictionary.h"
 #include "DecodeDictionary.h"
+#include <chrono>
+#include <fstream>
 
 namespace DictionaryTests
 {
@@ -21,27 +23,25 @@ namespace DictionaryTests
         {
             input.push_back(inputString[i]);
         }
-        EncodeDictionary<unsigned short> encDict;
-        std::vector<unsigned short> encodedOutput;
 
+        EncodeDictionary<unsigned short> encDict(std::max(static_cast<unsigned long>(input.size()*1.3),static_cast<unsigned long>(1024)));
+        std::vector<unsigned short> encodedOutput;
         std::vector<unsigned char> currentPattern;
-        for(unsigned char current : input)
+
+        for (unsigned char currentChar : input)
         {
-            if(encDict.inDictionary(currentPattern+current))
+            if (encDict.inDictionary(currentPattern + currentChar))
             {
-                currentPattern.push_back(current);
-            }
-            else
-            {
+                currentPattern.push_back(currentChar);
+            } else {
                 encodedOutput.push_back(encDict.getCode(currentPattern));
-                currentPattern.push_back(current);
+                currentPattern.push_back(currentChar);
                 encDict.add(currentPattern);
-                currentPattern = {current};
+                currentPattern = {currentChar};
             }
         }
         encodedOutput.push_back(encDict.getCode(currentPattern));
         EXPECT_LT(encodedOutput.size(),input.size());
-
 
         DecodeDictionary<unsigned short> decDict;
         unsigned short previousCode=encodedOutput[0];
@@ -54,10 +54,9 @@ namespace DictionaryTests
         for(unsigned int currentPos = 1;currentPos<encodedOutput.size();currentPos++)
         {
             currentCode = encodedOutput[currentPos];
-            EXPECT_TRUE(decDict.inDictionary(currentCode));
             if(!decDict.inDictionary(currentCode))
             {
-                throw(std::runtime_error("code doesn't exist"));
+                currentPattern.push_back(currentPattern[0]);
             }
             else
             {
@@ -74,5 +73,84 @@ namespace DictionaryTests
             outputString.push_back(i);
         }
         EXPECT_EQ(outputString,inputString);
+    }
+
+    void compressCycle(std::vector<unsigned char>& input,std::vector<unsigned char>& output,bool linkedListMode){
+        EncodeDictionary<unsigned int> encDict(
+                !linkedListMode?1:std::max(static_cast<unsigned long>(input.size() * 1.3), static_cast<unsigned long>(1024)),linkedListMode);
+        std::vector<unsigned int> encodedOutput;
+        std::vector<unsigned char> currentPattern;
+
+        for (unsigned char currentChar : input) {
+            if (encDict.inDictionary(currentPattern + currentChar)) {
+                currentPattern.push_back(currentChar);
+            } else {
+                encodedOutput.push_back(encDict.getCode(currentPattern));
+                currentPattern.push_back(currentChar);
+                encDict.add(currentPattern);
+                currentPattern = {currentChar};
+            }
+        }
+        encodedOutput.push_back(encDict.getCode(currentPattern));
+
+        DecodeDictionary<unsigned int> decDict(
+                !linkedListMode?1:std::max(static_cast<unsigned long>(input.size() * 1.3), static_cast<unsigned long>(1024)),linkedListMode);
+        unsigned int previousCode = encodedOutput[0];
+        unsigned int currentCode = 0;
+        output.clear();
+
+        currentPattern.clear();
+        currentPattern = decDict.getBytes(previousCode);
+        output.insert(output.end(), currentPattern.begin(), currentPattern.end());
+        for (unsigned int currentPos = 1; currentPos < encodedOutput.size(); currentPos++) {
+            currentCode = encodedOutput[currentPos];
+            if (!decDict.inDictionary(currentCode)) {
+                currentPattern.push_back(currentPattern[0]);
+            } else {
+                currentPattern = decDict.getBytes(currentCode);
+            }
+            output.insert(output.end(), currentPattern.begin(), currentPattern.end());
+            decDict.add(previousCode, currentPattern[0]);
+            previousCode = currentCode;
+        }
+    }
+
+
+    //Warning, this takes approximately 6 hours to run, don't run it unless you really  mean to
+    //Need to remove "DISABLED_" before running, and put back afterwards
+    TEST(DISABLED_Combined_Dictionary,TimeComplexityTest){
+        const unsigned int number_of_iterations = 100000;
+        std::ofstream outputFileHash("../../Test_Files/Runtime_Data/Hash_Runtime.dat");
+        std::ofstream outputFileLink("../../Test_Files/Runtime_Data/Link_Runtime.dat");
+
+        for (unsigned int i=1;i<number_of_iterations+1;i+=100) {
+            for (int z = 0; z < 2; z++) { //Used for linked_list vs hash_table
+
+                std::vector<unsigned char> input;
+                std::vector<unsigned char> output;
+                for (unsigned int j = 0; j < i; j++) {
+                    input.push_back(std::rand() % (static_cast<unsigned char>(0) - 10));
+                }
+
+                //Start timing the algorithm
+                auto start = std::chrono::system_clock::now();
+
+                compressCycle(input,output,z==0);
+
+                //Stop timing the algorithm
+                auto end = std::chrono::system_clock::now();
+                EXPECT_EQ(output, input);
+
+                if(z == 0) {
+                    outputFileHash << i << " " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
+                               << std::endl;
+                }
+                else if(z == 1){
+                    outputFileLink << i << " " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
+                                   << std::endl;
+                }
+            }
+        }
+        outputFileHash.close();
     }
 }
