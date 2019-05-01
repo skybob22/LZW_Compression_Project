@@ -109,7 +109,6 @@ namespace LZW
             currentCode = input[currentPos];
             if (!decDict.inDictionary(currentCode))
             {
-                //throw(std::runtime_error("Code doesn't exist")); //Since the dictionary is built as it goes, it should never encounter a code not in the dictionary
                 currentPattern.push_back(currentPattern[0]);
             } else
                 {

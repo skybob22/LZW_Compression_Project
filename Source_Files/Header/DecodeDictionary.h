@@ -12,7 +12,6 @@ namespace Dictionary{
         //Will generate compile-time error if type is not unsigned
         static_assert(std::is_unsigned<T>::value,"Must use unsigned type");
 
-        DecodeDictionary(unsigned long initialSize,bool autoRehash);
 
         Hash::HashTable<T,std::vector<unsigned char>>* hashTable;
         T currentAssignValue;
@@ -26,6 +25,7 @@ namespace Dictionary{
 
         DecodeDictionary(void);
         DecodeDictionary(unsigned long initialSize);
+        DecodeDictionary(unsigned long initialSize,bool autoRehash);
         ~DecodeDictionary(void);
 
 
